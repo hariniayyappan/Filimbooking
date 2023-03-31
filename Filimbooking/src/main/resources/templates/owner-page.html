@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Home</title>
+<link rel="stylesheet" href="#" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" href="#" th:href="@{/css/all.css}" />
+<link rel="stylesheet" href="#" th:href="@{/css/index.css}" />
+</head>
+<body>
+
+	<div class="container base">
+		<div class="row base-row">
+			<div class="col-3 menu">
+			<div class="logo mb-5 text-center text-light bg-dark pt-1 pb-1">
+			<h4>Inmakes Gold Theatre</h4>
+			</div>
+				<ul class="list">
+					<li><a th:href="@{/}"><i class="fas fa-home"></i>&nbsp;&nbsp;Home</a></li>
+					<li><a th:classappend="${menu == 'register'} ? 'text-dark' : ' '" th:href="@{/register}"><i class="fas fa-user-plus"></i>&nbsp;&nbsp;Register</a></li>
+					<li><a th:href="@{/loginForm}"><i class="fas fa-users"></i>&nbsp;&nbsp;Login</a></li>
+					<li><a href=""><i class="fas fa-address-card"></i>&nbsp;&nbsp;About
+							us</a></li>
+					<li><a href=""><i class="fas fa-phone-square-alt"></i>&nbsp;&nbsp;Contact
+							us</a></li>
+				</ul>
+			</div>
+			<div class="col-9 add movie-form">
+				<div class="add movie">
+					<form action="save" method="post">
+					<div class="add movie-head">
+						<h3>Add movie</h3>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputName">Enter Movie Name</label> <input type="text"
+								class="form-control" id="exampleInputName"
+								placeholder="Enter movie name" name="name">
+
+						</div>
+
+						<div class="form-group">
+							<label for="exampleInputMovieImage">Enter Movie Image</label> <input
+								type="image" class="form-control" id="exampleInputImage"
+								name="image" placeholder="Enter movie image">
+
+						</div>
+
+						<div class="form-group">
+							<label for="exampleInputMovieDetails">Enter Movie Details</label> <input
+								type="moviedetails" class="form-control" id="exampleInputMovieDetails"
+								placeholder="Enter movie details" name="enter movie details">
+						</div>
+                         <div class="form-group">
+							<label for="exampleInputScreen">Enter Screen</label> <input
+								type="screen" class="form-control" id="exampleInputScreen"
+								placeholder="Enter screen" name="enter screen">
+						</div>
+						<button type="add movie" class="btn btn-primary">Add movie</button>
+						</div>
+						<button type="clear" class="btn btn-primary">Clear</button>
+						
+					</form>
+					<div class="add movie">
+						<p>
+							 <span><a th:href="@{/add movie}">View All details </a></span>
+						</p>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
