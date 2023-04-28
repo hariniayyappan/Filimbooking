@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Movie</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cosmo/bootstrap.min.css" />
+    <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" ></script>
+</head>
+<body>
+<div align="center">
+    <h1>add New movie</h1>
+    <br />
+     <div class="col-sm-4">
+    <form action="#" th:action="@{/saveMovie}" th:object="${movieDetails}" method="post">
+
+      
+ 	<div alight="left">
+            <tr>
+                <label class="form-label" >movie Name</label>
+                <td>
+	                <input type="hidden" field="*{movieId}" name="movie_id" >
+	                <input type="text" field="*{movieName}" name="movieName"  class="form-control" placeholder="movie Name" />
+                </td>
+                
+                
+            </tr>
+         </div>   
+       
+         
+          <div alight="left">
+            <tr>
+                <label class="form-label" >image</label>
+                
+                <td>
+                 <input type="text" field="*{image}" name= "image"class="form-control" placeholder="image" />
+                </td>
+            </tr>
+         </div>  
+<div alight="left">
+            <tr>
+                <label class="form-label" >movie Details</label>
+                <td>
+	                <input type="hidden" field="*{movieDetails}" name="movieDetails" >
+	                <input type="text" field="*{movieDetails}" name="movieDetails" class="form-control" placeholder="movie Details" />
+                </td>
+            </tr>
+         </div>   
+         
+	<br>
+            <tr>
+              <td colspan="2"><button type="submit" class="btn btn-info">Save</button> </td>
+            </tr>
+
+             </form>
+        </div>
+        <br>
+        <a th:href="@{/viewmovie}" class="btn btn-primary">View All Movies</a>
+    </div>
+</body>
+</html>

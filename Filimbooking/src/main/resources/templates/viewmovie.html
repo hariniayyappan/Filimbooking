@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>view movie</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cosmo/bootstrap.min.css" />
+ <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" ></script>
+</head>
+<body>
+
+<div>
+	<h2 >Movie Details</h2>
+	<tr>
+		<div align = "left" >
+		   
+		
+		   
+	    </div>
+	</tr>
+
+	<div class="col-sm-8" align = "center">
+    <div class="panel-body" align = "center" >
+                 
+                 
+  <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      		<th>movie ID</th>
+            <th>movie Name</th>
+            <th> image</th>
+            <th>movieDetails</th>
+            <th>Action</th>
+   	</tr>
+  </thead>
+  <tbody>
+      <tr  th:each="movie: ${movieDetails}">
+		<td th:text="${movie.movieId}">movie ID</td>
+		<td th:text="${movie.movieName}">movie Name</td>
+		<td th:text="${movie.image}">image</td>
+       <td th:text="${movie.movieDetails}">movieDetails</td>
+       
+       	<td>
+	   <form method="post" th:action="@{/viewmovie/deleteMovie/{movieId}(movieId=${movie.movieId})}">
+                        <input type="submit" value="Delete"/>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <form method="get" th:action="@{/addmovie}">
+        <input type="submit" value="Back"/>
+    </form>
+		
+	
+                    
+   </div>
+   </div> 
+</body>
+</html>		
+	
+	

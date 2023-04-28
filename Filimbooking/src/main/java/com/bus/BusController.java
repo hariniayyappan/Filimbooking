@@ -9,9 +9,13 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.bus.service.MovieRepo;
+import com.bus.service.MovieService;
+
+import org.hibernate.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.bus.beans.Customer;
 import com.bus.beans.MovieDetails;
@@ -30,6 +35,10 @@ import com.bus.service.CustomerDao;
 
 @Controller
 public class BusController {
+	
+	@Autowired
+	private MovieService service;
+	
 
 
     @Autowired
@@ -40,6 +49,10 @@ public class BusController {
 
     @Autowired
     private EmailService emailService;
+
+
+
+	private Object listmovieDetails;
 
     // Opening home page
     @GetMapping("/")
@@ -86,7 +99,7 @@ public class BusController {
             return "home";
 
         } else {
-            return "redirect:/";
+            return "redirect:/home";
 
         }
 
@@ -99,49 +112,51 @@ public class BusController {
         m.addAttribute("menu", "register");
         return "register";
     }
-
-
-    @GetMapping("adminLoginForm")
-    public String showAdminPage() {
-        return "add-movie";
+    @GetMapping(" //")
+    public String viewHomePage(Model model) {
+        model.addAttribute("listMovieDetails", MovieService.getAllMovieDetails1());
+        return "viewmovie";
     }
-
-    //save movie
-
-    @PostMapping("/saveMovie")
-    public String saveMovie(@ModelAttribute("MovieDetails") MovieDetails movieDetails) {
-        movieRepo.save(movieDetails);
-        return "redirect:/home";
+    
+    @RequestMapping
+    public String getAllMovieDetails(Model model) 
+    {
+      List<MovieDetails> list = service.getAllMovieDetails();
+   
+      model.addAttribute("movieDetails", list);
+      return "viewmovie";
     }
-
-    @GetMapping("deleteMovieForm")
-    public String showDeleteMovieForm() {
-        return "delete-movie";
+    @SuppressWarnings("unused")
+	@GetMapping("/addmovie")
+    public String add(Model model) {
+		 List<MovieDetails> movieDetails= dao.getAllMovie();
+        model.addAttribute("listmovieDetails", listmovieDetails);
+        model.addAttribute("movieDetails", new MovieDetails());
+        return "addmovie";
     }
-
-
-
-    @PostMapping("/deleteMovie")
-    public String deleteMovie(@ModelAttribute("MovieDetails") MovieDetails movieDetails) {
-        movieRepo.deleteById(movieDetails.getMovieId());
-        return "redirect:/home";
+	
+		
+	@PostMapping("/saveMovie")
+	public String saveMovieDetails(@ModelAttribute("movieDetails")MovieDetails movieDetails) {
+		this.service.saveMovie(movieDetails);
+		return "addmovie";
+	}
+	@GetMapping("/viewmovie")
+    public String viewAllMovies(Model model) {
+        List<MovieDetails> movieDetails = movieRepo.findAll();
+        model.addAttribute("movieDetails", movieDetails);
+        return "viewmovie";
     }
+	 
+	
+	@PostMapping("/viewmovie/deleteMovie/{movieId}")
+	public String  deleteMovieDetails(@PathVariable(name="movieId") long movieId) {
+		this.service.deleteMovieDetailsBymovieId(movieId);
+		return "redirect:/viewmovie";
+		}
+	
 
-    //admin login
-    @GetMapping("/adminlogin")
-    public String adminLogin(@RequestParam("Email") String email, @RequestParam("password") String password, Object User) {
-
-        if (User != null && ((Owner) User).getEmail().equals("sweetyraghav24@gmail.com")) {
-            //Redirect to admin dashboard(add-movie)
-            return "redirect:/add-movie";
-        } else {
-            //Redirect to customer login page
-            return "redirect:/loginForm";
-        }
-    }
-
-
-    //Add movie details
+      //Add movie details
     @GetMapping("/ownerPage")
     public String ownerPage(Model m) {
 
@@ -169,22 +184,35 @@ public class BusController {
     public String login(@RequestParam("email") String email, @RequestParam("password") String password,
                         HttpSession session, Model m) {
 
-        Customer object = (Customer) session.getAttribute("user");
-        if (object != null) {
-            return "redirect:/booking-seat";
-        } else {
-
-            Customer customer = dao.login(email, password);
-
-            if (customer == null) {
-                m.addAttribute("failed", "Invalid login");
-                return "login";
+    	if(email.equals("harinilakshmi2405@gmail.com")&&password.equals("12345")) {
+    		 return "addmovie";
+    	}
+    	else {
+    		Customer object = (Customer) session.getAttribute("user");
+            if (object != null) {
+                return "redirect:/booking-seat";
             } else {
-                session.setAttribute("user", customer);
+
+                Customer customer = dao.login(email, password);
+
+                if (customer == null) {
+                    m.addAttribute("failed", "Invalid login");
+                    return "login";
+                } else {
+                    session.setAttribute("user", customer);
+                }
+                return "redirect:/home";
             }
-            return "redirect:/home";
-        }
-    }
+    		
+            }
+    	
+            }
+    
+
+	
+	
+
+
 
 
     @GetMapping("/home")
@@ -241,12 +269,14 @@ public class BusController {
             User user = new User();
             user.setEmail(customer.getEmail());
             user.setName(customer.getName());
-            String ticketDetails = "ticket booking date is " + now + " and time is " + time + " seats " + seatNo1;
-            emailService.sendEmail(user, ticketDetails);
+            double price = 525.22d;
+			
+			String ticketDetails = "ticket booking date is " + now + " and time is " + time + " seats " + seatNo1+"price is"+price;
+            EmailService.sendEmail(user, ticketDetails);
             session.setAttribute("user", customer);
             return "dashboard";
         } else {
-            return "redirect:/home";
+            return "redirect:/";
         }
 
     }
